@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <title>dapr.io - arkitektur i Skyen</title>
+    <meta charset="utf-8">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+        @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+        @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', sans-serif, BlinkMacSystemFont, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-weight: normal;
+        }
+
+        .remark-code,
+        .remark-inline-code {
+            font-family: 'Cascadia Code', 'Ubuntu Mono', 'Courier New';
+        }
+
+        /* Two-column layouts */
+        .left-column {
+            width: 49%;
+            float: left;
+        }
+
+        .right-column {
+            width: 49%;
+            float: right;
+        }
+
+        .left-column-33 {
+            width: 33%;
+            float: left;
+        }
+
+        .right-column-66 {
+            width: 66%;
+            float: right;
+        }
+
+        .left-column-66 {
+            width: 66%;
+            float: left;
+        }
+
+        .right-column-33 {
+            width: 33%;
+            float: right;
+        }
+
+        .right-column~p {
+            clear: both;
+        }
+
+        .right-column~ul {
+            clear: both;
+        }
+
+        .img-width-half img {
+            max-width: 400px;
+        }
+
+        .img-width-third img {
+            max-width: 250px;
+        }
+
+        .img-width-two-thirds img {
+            max-width: 550px;
+        }
+
+        .img-width-400 img {
+            max-width: 400px;
+        }
+
+        .img-width-all img {
+            max-width: 675px
+        }
+        
+        .center p {
+            text-align:center;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+        var slideshow = remark.create({
+            sourceUrl: 'index.md'
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: false,
+            cloneCssStyles: false
+        });
+        function initMermaid(s) {
+            var diagrams = document.querySelectorAll('.mermaid');
+            var i;
+            for (i = 0; i < diagrams.length; i++) {
+                if (diagrams[i].offsetWidth > 0) {
+                    mermaid.init(undefined, diagrams[i]);
+                }
+            }
+        }
+        slideshow.on('afterShowSlide', initMermaid);
+        initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
+    </script>
+</body>
+</html>
