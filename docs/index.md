@@ -140,6 +140,16 @@ class: center, middle
 
 ---
 
+# Hexagonal architecture
+
+Aka. Ports and adapters
+
+https://alistair.cockburn.us/hexagonal-architecture/
+https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)
+https://medium.com/idealo-tech-blog/hexagonal-ports-adapters-architecture-e3617bcf00a0
+
+
+
 
 ---
 <figure>
