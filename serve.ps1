@@ -1,1 +1,1 @@
-npx browser-sync start --server --ss docs
+npx browser-sync start --server --ss docs --port 2999 --no-ui
