@@ -175,6 +175,115 @@ class: center, middle
 
 ---
 
+# Integration test with Asp.Net
+
+**EndpointTests.cs:**
+
+```cs
+[Theory]
+[InlineData("/swagger")]
+[InlineData("/health")]
+public async Task GetEndpoints(string url)
+{
+  var client = _factory.CreateClient();
+  var response = await client.GetAsync(url);
+
+  response.EnsureSuccessStatusCode();    
+}
+```
+
+???
+
+* Fires up the entire application in memory for the test
+* The factory creates an HTTP client implmentation that acts like a normal HttpClient, but which do not send any requests over the wire
+* This tests two endpoints in the application, and indirectly that the application can start up correctly
+* But in order to achieve this, we needs some tricks up our sleeves
+
+---
+
+# DI container initialization
+
+**Program.cs:**
+
+```cs
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<IShortUrlService, EfShortUrlService>();
+builder.Services.AddDbContext<ShortUrlDbContext>(options => {
+    var folder = Environment.SpecialFolder.LocalApplicationData;
+    var path = Environment.GetFolderPath(folder);
+    options.UseSqlite($"Data Source={Path.Join(path,
+      "shorturls.db")}");
+});
+builder.Services.AddHealthChecks();
+var app = builder.Build();
+```
+
+???
+
+* Normal initialization of a dependency injection container might look like this
+* Notice the adding of the DbContext: let's say, that in our tests we would like to use an in-memory database instead of Sqlite
+* (I am not saying that this is strictly necessary, in fact there are good reasons for keeping sqlite in our test runs.)
+
+---
+
+# Changing DI for testing
+
+**CustomWebApplicationFactory.cs:**
+
+```cs
+public class CustomWebApplicationFactory<TProgram>
+  : WebApplicationFactory<TProgram> where TProgram : class
+{
+  protected override void ConfigureWebHost(IWebHostBuilder builder)
+  {
+    builder.ConfigureServices(services => {
+      var descriptor = services.Single(d => d.ServiceType
+        == typeof(DbContextOptions<ShortUrlDbContext>));
+      services.Remove(descriptor);
+      services.AddDbContext<ShortUrlDbContext>(options => 
+        options.UseInMemoryDatabase("InMemoryForTesting"));
+    });
+  }
+}
+```
+
+???
+
+* 
+
+---
+
+# Using test DI setup
+
+**EndpointTests.cs:**
+
+```cs
+public class EndpointTests
+  : IClassFixture<CustomWebApplicationFactory<Program>>
+{
+    private readonly CustomWebApplicationFactory<Program> _factory;
+
+    public EndpointTests(CustomWebApplicationFactory<Program> factory)
+        => _factory = factory;
+
+    [Theory]
+    [InlineData("/swagger")]
+    [InlineData("/health")]
+    public async Task GetEndpoints(string url)
+    {
+        var client = _factory.CreateClient();
+        var response = await client.GetAsync(url);
+
+        response.EnsureSuccessStatusCode();    
+    }
+}
+```
+
+---
+
 # Challenge: dependencies
 
 .center[.img-width-all[![🤷](images/dependencies_nuget.png)]]
@@ -466,6 +575,12 @@ https://medium.com/idealo-tech-blog/hexagonal-ports-adapters-architecture-e3617b
 
 .center[.img-width-all[![🤷](images/hexagonal-architecture-integration-tests.drawio.png)]]
 
+???
+
+* One idea here is that we can create our integration tests by interacting with the ports, leaving out the adapters
+* Since ports are generic, input ports can be driven by our tests, and the output ports will need test stubs and mocks set up
+* Mocks will be used to verify expected side-effects of the test execution, stubs can be used to provide test data to our tests
+
 ---
 
 # Adapters with Dapr
@@ -474,11 +589,25 @@ https://medium.com/idealo-tech-blog/hexagonal-ports-adapters-architecture-e3617b
 
 .center[.img-width-all[![🤷](images/hexagonal-architecture-dapr.drawio.png)]]
 
+???
+
+* So, how does our use of Dapr impact our architecture?
+* Well, all the adapters essentially become HTTP-based
+* The primary adapters are controllers if you use the MVC patterns, or plan Kestrel middleware if not
+* The secondary adapters can all be based on HttpClient
+
 ---
 
 # API tests with Dapr
 
 .center[.img-width-all[![🤷](images/hexagonal-architecture-dapr-api-tests.drawio.png)]]
+
+???
+
+* So the idea then, if adapters are transparent and comprehensive, they can be included in our test runs
+* We can test the microservice as a whole by poking at its interface with the world.
+* The tests would call the microservice in the same manner as other, consuming microservices would do in production
+* The microservice will produce calls to consumed microservice as it would do in production
 
 ---
 
