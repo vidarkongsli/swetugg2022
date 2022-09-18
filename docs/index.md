@@ -27,7 +27,7 @@ class: whitefont
 
 ---
 
-class: center, middle
+class: center
 
 # Software testing
 
@@ -41,7 +41,22 @@ class: center, middle
 ---
 
 class: center, middle
-# **Dapr**
+
+# Software testing
+
+.img-width-half[![🤷](images/testing-intro.png)]
+
+???
+
+* We have talked about software testing for a long time
+* In particular, automated testing, has been around for 20 years or so
+* 2000: junit, TDD
+* We have not really hit the sweet spot yet
+
+---
+
+class: center, middle
+# **Dapr.io**
 # *Distributed Application Runtime*
 
 ???
@@ -182,6 +197,7 @@ class: center, middle
 * Article: [Integration tests in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-6.0)
 
 ---
+
 # Demo
 
 .center[![Let's go](images/demo-3.gif)]
@@ -408,7 +424,7 @@ class: center
 
 # Named HttpClient
 
-Program.cs:
+**Program.cs:**
 
 ```csharp
 var daprHttpPort = Environment
@@ -543,7 +559,8 @@ public class EventNotificationController
     return wasProccessedCorrectly
       ? new OkResult()
       : new StatusCodeResult((int)HttpStatusCode.TooManyRequests); 
-    }
+  }
+}
 ```
 
 ???
