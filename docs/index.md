@@ -6,7 +6,20 @@ class: center, middle
 
 ---
 
-# Vidar
+background-image: url(./images/IMG_20210314_124902.jpg)
+background-position: center;
+color: white;
+class: whitefont
+
+# Vidar Kongsli
+
+* 21 years experience in software development
+* 16 years experience in .NET
+* Lives in Oslo, Norway
+* Twitter/GitHub/LinkedIn: `vidarkongsli`
+* Works at **Bredvid AS** - `bredvid.no`
+   * Oslo-based software development consultancy
+   *  🌐`https://www.bredvid.no`  ✉️`jobb@bredvid.no`
 
 ---
 
@@ -609,293 +622,296 @@ https://medium.com/idealo-tech-blog/hexagonal-ports-adapters-architecture-e3617b
 * The tests would call the microservice in the same manner as other, consuming microservices would do in production
 * The microservice will produce calls to consumed microservice as it would do in production
 
----
-
-class: center, middle
-
-# Hva er utfordringene med å utvikle microservices?
 
 ---
 
-# Utfordring: testing
+# A demo application
 
-* Hvordan skal man kunne teste en microtjeneste
-   * ... i isolasjon?
-   * ... i lokalt utviklingsmiljø?
 
----
-
-# Utfordring: konfigurasjon
-
-* Mange muligheter for å konfigurere en applikasjon
-  1. Miljøvariable?
-  1. Konfigurasjonsfiler?
-  1. Kommandolinje?
-  1. Diverse nettsky-alternativer
-  1. I koden?
-
-* Hvordan lage en kosistent konfigurasjon med miljøavhengige parametre?
-* Testing: Mocking / stubbing av alle API-er
+.center[.img-width-all[![🤷](images/demo-app.drawio.png)]]
 
 ---
 
-class: center
+# Redirection tests
 
-# Dapr
+```cs
+[Theory]
+[InlineData("/ex", HttpStatusCode.Found)]
+[InlineData("", HttpStatusCode.NotFound)]
+public async Task ShouldRedirectIfFound(string path,
+  HttpStatusCode expectedHttpStatusCode)
+{
+  InitializeDrivenAdapters();
+  var client = _factory.CreateClient();
+  var result = await client.GetAsync(path);
 
-.left-column[
-### APIs for building portable and reliable microservices
+  Assert.Equal(expectedHttpStatusCode, result.StatusCode);
+  VerifyDrivenAdapterExpectations();
+}
+```
 
-]
-.right-column[.img-width-half[![🤷](images/dapr-overview.png)]]
+---
+# Redirection tests
+
+.center[.img-width-all[![🤷](images/demo-app-main-tests.drawio.png)]]
 
 ---
 
-class: center
+# Inject HttpClientFactory
 
-# Demo
+**CustomWebApplicationFactory.cs:**
 
-<figure>
-.img-width-all[![](images/jade-masri-u1zkgrqrKn0-unsplash.jpg)]
-<figcaption align="center">Photo by <a href="https://unsplash.com/@jademasri?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Jade Masri</a> on <a href="https://unsplash.com/s/photos/sidecar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></figcaption>
-</figure>
+```cs
+public class CustomWebApplicationFactory<TProgram>
+  : WebApplicationFactory<TProgram> where TProgram : class
+{
+  public MockHttpClientFactory HttpClientFactory { get; }
+    = new MockHttpClientFactory();
 
----
+  public CustomWebApplicationFactory()
+    => ClientOptions.AllowAutoRedirect = false;   
 
-# (Enda en) demo
-
-<figure>
-.img-width-all[![](images/hidde-schalm-38FLdKhz_rM-unsplash.jpg)]
-<figcaption align="center">Photo by <a href="https://unsplash.com/@hdsfotografie95?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">hidde schalm</a> on <a href="https://unsplash.com/photos/u1zkgrqrKn0?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-  </figcaption>
-</figure>
-
-
----
-
-class: center, middle
-
-# Testing
-
-.img-width-half[![🤷](images/testing-intro.png)]
+  protected override void ConfigureWebHost(IWebHostBuilder builder)
+  {
+    builder.ConfigureServices(services => 
+    {
+      services.AddSingleton<IHttpClientFactory>(HttpClientFactory);
+    });
+  }
+}
+```
 
 ---
 
-class: center, middle
-# Testpyramiden
+# Intercept HTTP calls
 
-.img-width-two-thirds[![🤷](images/test-pyramid-simple.jpeg)]
+**MockHttpClientFactory.cs:**
 
----
+```cs
+public class MockHttpClientFactory : IHttpClientFactory
+{
+  private readonly Dictionary<string, MockHttpMessageHandler>
+    _handlers = new();
 
-class: center, middle
-# Testpyramiden - 2
+  public HttpClient CreateClient(string name)
+  {
+    var mockMessageHandler = _handlers.ContainsKey(name)
+      ? _handlers[name] : new MockHttpMessageHandler();
+    var httpClient = mockMessageHandler.ToHttpClient();
+    httpClient.BaseAddress = new Uri($"http://localhost/");
+    return httpClient;
+  }
 
-.img-width-all[![🤷](images/test-pyramid-adv.png)]
+  public MockHttpMessageHandler CreateHttpResponsesFor(string name)
+  {
+    if (!_handlers.ContainsKey(name))
+      _handlers.Add(name, new MockHttpMessageHandler());
+    return _handlers[name];
+  }
+}
+```
 
----
-
-class: center, middle
-# Testpyramiden - 3
-
-.img-width-all[![🤷](images/test-pyramid-adv-2.webp)]
-
----
-
-class: center
-
-# Applikasjon - Dapr
-
-.img-width-all[![🤷](images/testing-app-dapr.png)]
-
----
-
-class: center
-
-# Applikasjon - tester
-
-.img-width-all[![🤷](images/testing-app-tests.png)]
+***** Nuget package [RichardSzalay.MockHttp](https://github.com/richardszalay/mockhttp).
 
 ---
 
-class: center
+# Stubbing
 
-# Applikasjon - testrammeverk
-
-.img-width-all[![🤷](images/testing-app-test-framework.png)]
-
----
-
-class: center
-
-# Applikasjon - TestServer (MS)
-
-.img-width-all[![🤷](images/testing-app-test-framework-ms-testserver.png)]
-
-
----
-
-class: center, middle
-
-# Ad nubes (lat.)
-
-.img-width-all[![🤷](images/cloud-native-dilbert.png)]
-
----
-
-# Litt terminologi om kontainere
-
-.left-column[
-
-* **container image** - *An image is a read-only template with instructions for creating a Docker container. Often, an image is based on another image, with some additional customization.*
-* **container** - *A container is a runnable instance of an image. You can create, start, stop, move, or delete a container using the Docker API or CLI. You can connect a container to one or more networks, attach storage to it, or even create a new image based on its current state.*
-]
-.right-column[.img-width-half[![🤷](images/docker-architecture-excerpt.png)]]
+```cs
+private void InitializeDrivenAdapters()
+{
+  var stateHttpClient = _factory.HttpClientFactory
+    .CreateHttpResponsesFor("state");
+  
+  stateHttpClient.Clear();
+  
+  stateHttpClient.When(HttpMethod.Get,
+    "http://localhost/shorturls/ex")
+    .Respond("application/json",
+      EmbeddedResource.ReadTestData<RedirectionTests>("State",
+        "GetShortUrlsExpressenResponse.json"));
+  
+  stateHttpClient.Fallback.Respond(request => throw new Exception(
+    "HttpClient stub 'state' did not have knowledge of "
+      + $"{request.Method} {request.RequestUri}"));
+}
+```
 
 ---
 
-# Litt terminologi om kontainere
+# Mocking
 
-.img-width-all[![🤷](images/docker-architecture.png)]
+```cs
+private void InitializeDrivenAdapters()
+{
+  var publishHttpClient = _factory.HttpClientFactory
+    .CreateHttpResponsesFor("publish");
+  publishHttpClient.Clear();
+  publishHttpClient
+   .Expect(HttpMethod.Post, "http://localhost/"
+     + RequestEventPublisher.PUBSUB_NAME + "/"
+     + RequestEventPublisher.TOPIC_NAME;
+   .Respond(HttpStatusCode.NoContent);
+}
 
----
-class: center
-
-# Litt om Kubernetes
-
-## Pods
-
-.img-width-all[![🤷](images/basic-pod.drawio.png)]
-
----
-class: center
-
-# Litt om Kubernetes
-
-## Sidecars
-
-.img-width-all[![🤷](images/sidecar-pod.drawio.png)]
-
----
-class: center
-
-# Litt om Kubernetes
-
-## Init containers
-
-.img-width-all[![🤷](images/init-container.drawio.png)]
-
----
-class: center
-
-# Litt om Kubernetes
-
-## Nodes
-
-.img-width-half[![🤷](images/kubernetes-nodes.png)]
-
----
-class: center
-
-# Litt om Kubernetes
-
-## Services - discovery
-
-.img-width-all[![🤷](images/service-discovery.drawio.png)]
-
----
-class: center
-# Ad Kubernetes
-
-<figure>
-.img-width-all[![](images/austrian-national-library-YS1uOp1QduA-unsplash.jpg)]
-<figcaption align="center">Photo by <a href="https://unsplash.com/@austriannationallibrary?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Austrian National Library</a> on <a href="https://unsplash.com/s/photos/sidecar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></figcaption>
-</figure>
+private void VerifyDrivenAdapterExpectations()
+{
+  _factory.HttpClientFactory
+    .CreateHttpResponsesFor("publish")
+    .VerifyNoOutstandingExpectation();
+}
+```
 
 ---
 
-class: center
-# Dapr på K8S
+# Notification tests
 
-.img-width-all[![🤷](images/k8s-simple.png)]
 
----
-
-class: center
-
-# Dapr/kalkulator på K8S
-
-.img-width-all[![🤷](images/k8s-calculator.png)]
+.center[.img-width-all[![🤷](images/demo-app-notification-tests.drawio.png)]]
 
 ---
 
-class: center
+# Mocking email binding
 
-# Dapr/kalkulator på K8S
+```cs
+[Fact]
+public async Task ShouldSendNotificationIfNoMatchEventReceived()
+{
+  var bindingsHttpClient = _factory
+    .HttpClientFactory.CreateHttpResponsesFor("bindings");
 
-.img-width-all[![🤷](images/k8s-calculator.png)]
+  bindingsHttpClient.Clear();
 
-# 🤔
+  bindingsHttpClient.Expect(HttpMethod.Post,
+    "http://localhost/email")
+    .WithPartialContent("Short url /ex did not match")
+    .Respond(HttpStatusCode.OK);
 
----
-
-class: center
-# Dapr/pub-sub på K8S
-
-.img-width-all[![🤷](images/k8s-pub-sub.png)]
-
----
-class: center
-# Ad Azure/AWS/Google Cloud
-
-<figure>
-.img-width-all[![](images/revolt-Bc3Kjwxqu-E-unsplash.jpg)]
-<figcaption align="center">Photo by <a href="https://unsplash.com/@revolt?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">REVOLT</a> on <a href="https://unsplash.com/s/photos/sidecar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-  </figcaption>
-</figure>
----
-class: center
-# Ad Azure/AWS/Google Cloud
-.img-width-all[![🤷](images/deploy-clouds.gif)]
+  bindingsHttpClient.Fallback.Respond(request
+    => throw new Exception(
+      "HttpClient stub 'bindings' did not have knowledge of "
+      + "${request.Method} {request.RequestUri}"));
+  ...
+```
 
 ---
 
-# Dapr - byggeklosser
+# Testing notifications
 
-1. Service invocation
-1. Publish & Subscribe
-1. State management
-1. Secret management
-1. Input/output bindings
-1. Virtual actors
+```cs
+[Fact]
+public async Task ShouldSendNotificationIfNoMatchEventReceived()
+{
+  var client = _factory.CreateClient();
+
+  var requestEvent = new RequestEvent(Guid.NewGuid().ToString(),
+    "/ex", false, DateTimeOffset.UtcNow,
+    IpAddress: "127.0.0.1");
+        
+  var requestEventMessage = new DaprData<RequestEvent>(requestEvent);
+
+  var result
+    = await client.PostAsJsonAsync("/request", requestEventMessage);
+
+  result.EnsureSuccessStatusCode();
+
+  bindingsHttpClient.VerifyNoOutstandingExpectation();
+}
+```
+---
+# Tips and tricks
+
+1. Build a catalog of request/response data
+   * Embedded resources in your test projects
+   * Use in stubs and mocks
+1. Inspect Dapr API
+   * Documentation at [dapr.io](https://dapr.io).
+   * Use **REST Client** VS Code extension to poke at your sidecar
 
 ---
 
-# Dapr - fordeler
+# What we have achieved
 
-1. Secured connections
-1. Observability
-1. Resilient state
-1. Reliable actors
-1. Retries
-1. Message guarantee
-1. Discovery
 
 ---
 
-# Oppnår vi noe?🤔
+# What we have achieved
 
-Microservices:
-
-1. Highly maintainable and testable
-1. Loosely coupled
-1. Independently deployable
-1. Organized around business capabilities
-1. Owned by a small team
+1. Less dependencies
 
 ---
-class: center, middle
 
-.img-width-all[![🤷](images/app.png)]
+# Dependencies lost 🎉
 
-https://dapr.io
+```xml
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore"
+      Version="6.2.3" />
+  </ItemGroup>
+
+</Project>
+```
+
+---
+
+# What we have achieved
+
+1. Less dependencies
+
+---
+
+# What we have achieved
+
+1. Less dependencies
+1. Transparent and coherent communication with the world
+
+---
+
+# What we have achieved
+
+1. Less dependencies
+1. Transparent and coherent communication with the world
+1. Lowered the bar for focusing on API tests rather than unit tests
+
+---
+# What we have achieved
+
+1. Less dependencies
+1. Transparent and coherent communication with the world
+1. Lowered the bar for focusing on API tests rather than unit tests
+1. Tests that are oblibious to the application's inner structure
+   * Refactoring does not break tests
+
+---
+
+# Dapr building blocks
+
+Same stubbing/mocking pattern available for
+* Application configuration
+* Application secrets
+
+### &nbsp;
+
+.img-width-all[![🤷](images/dapr-building-blocks-config-secrets.drawio.png)]
+
+---
+
+background-image: url(./images/IMG_20210314_124902.jpg)
+background-position: center;
+color: white;
+class: whitefont
+
+# Questions?
+
+Contact me:
+
+* ✉️ `vidar.kongsli@bredvid.no`
+* Twitter/GitHub/LinkedIn: `vidarkongsli`
