@@ -908,6 +908,7 @@ public async Task ShouldSendNotificationIfNoMatchEventReceived()
 1. Lowered the bar for focusing on API tests rather than unit tests
 
 ---
+
 # What we have achieved
 
 1. Less dependencies
@@ -941,3 +942,8 @@ Contact me:
 
 * ✉️ `vidar.kongsli@bredvid.no`
 * Twitter/GitHub/LinkedIn: `vidarkongsli`
+
+Contents will be available at:
+
+* Presentation: `https://vidarkongsli.github.io/swetugg2022`
+* Sample code: `https://github.com/vidarkongsli/swetugg2022`
