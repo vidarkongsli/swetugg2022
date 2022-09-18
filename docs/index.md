@@ -71,6 +71,12 @@ class: center, middle
 
 What are microservices 🤔?
 
+---
+
+# The promise of microservices
+
+What are microservices 🤔?
+
 1. Highly maintainable and testable
 1. Loosely coupled
 1. Independently deployable
@@ -86,9 +92,8 @@ What are microservices 🤔?
 
 ---
 
-# Testing
-
-## ... we really mean automated testing
+class: center, middle 
+# Automated testing 🤖
 
 ???
 
@@ -648,7 +653,6 @@ https://medium.com/idealo-tech-blog/hexagonal-ports-adapters-architecture-e3617b
 
 # A demo application
 
-
 .center[.img-width-all[![🤷](images/demo-app.drawio.png)]]
 
 ---
@@ -672,6 +676,7 @@ public async Task ShouldRedirectIfFound(string path,
 ```
 
 ---
+
 # Redirection tests
 
 .center[.img-width-all[![🤷](images/demo-app-main-tests.drawio.png)]]
