@@ -1,3 +1,7 @@
+layout: true
+
+<div class="my-footer"><img src="images/bredvid-text-logo.svg" /><span><strong>bredvid.no</strong></span></div>
+---
 class: center, middle
 
 # Making **test-friendly** microservices with **Dapr**
