@@ -6,7 +6,9 @@ class: center, middle
 
 # Making **test-friendly** microservices with **Dapr**
 
-#### Swetugg Göteborg ✌️ Vidar Kongsli
+.img-width-third[![](images/GreenForLightBackground.png)]
+
+#### 2022 ✌️ Vidar Kongsli
 
 ---
 
@@ -25,6 +27,14 @@ class: whitefont
    * Oslo-based software development consultancy
    *  🌐`https://www.bredvid.no`  ✉️`jobb@bredvid.no`
 
+???
+
+* I really don't like to talk about myself, but here's the mandatory facts slide
+* Please ask questions if you have one
+* You may ask in English, Swedish, Norwegian
+* Even Danish, but that's pushing it
+* German would probably be pushing it too far
+
 ---
 
 class: center
@@ -33,7 +43,7 @@ class: center
 
 ???
 
-* We are going to talk about testing
+* We are going to talk about software testing
 * A topic that is near and dear to my heart, and has been for many years
 * I assume that you are have a basic familiarity with automated software testing
 * ...that you have written at least one test in code before
@@ -56,7 +66,9 @@ class: center, middle
 ---
 
 class: center, middle
+
 # **Dapr.io**
+
 # *Distributed Application Runtime*
 
 ???
@@ -70,6 +82,12 @@ class: center, middle
 # The promise of microservices
 
 What are microservices 🤔?
+
+???
+
+* The third topic mentioned in the title of this talk is 'microservices'
+* So we also need to spend a bit of time on that
+* What are really microservices, and what do they promise us?
 
 ---
 
@@ -89,10 +107,13 @@ What are microservices 🤔?
 * There it is, testable. I would argue that this does not come automatically, you have to work for it. Let's have a look at the challenges and possible solutions
 * Some of the other points are also interesting. Loosely coupled. Independenly deployable
 * Let's keep these in mind for later
+* The point is: these properties do not magically appear all by themselves once you start writing microservices.
+* You have to work for them, and that's what we are going to look at today
 
 ---
 
-class: center, middle 
+class: center, middle
+
 # Automated testing 🤖
 
 ???
@@ -104,6 +125,7 @@ class: center, middle
 ---
 
 class: center, middle
+
 # Testing pyramid
 
 .img-width-all[![🤷](images/testing-pyramid.drawio.png)]
@@ -126,6 +148,8 @@ class: center, middle
 ???
 
 * Of course, this talk is about microservices, so lets call them API tests instead of UI tests
+* I tend to disagree with this view, and I would question that we need to have so that there are more unit tests than integration tests, more integration tests than API tests
+* Maybe it should look like this.
 
 ---
 
@@ -137,7 +161,6 @@ class: center, middle
 
 ???
 
-* I tend to disagree with this view, and I would say that maybe it should look like this.
 * Maybe we could call it the testing diamond.
 * Again, I am not too preoccupied with definitions of test types here
 * But of course it depends on how you define a unit tests, meaning what is your definition of a unit?
@@ -223,9 +246,13 @@ class: center, middle
 [InlineData("/health")]
 public async Task GetEndpoints(string url)
 {
+  // Arrange
   var client = _factory.CreateClient();
+
+  // Act
   var response = await client.GetAsync(url);
 
+  // Assert
   response.EnsureSuccessStatusCode();    
 }
 ```
@@ -249,7 +276,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IShortUrlService, EfShortUrlService>();
-builder.Services.AddDbContext<ShortUrlDbContext>(options => {
+*builder.Services.AddDbContext<ShortUrlDbContext>(options => {
     var folder = Environment.SpecialFolder.LocalApplicationData;
     var path = Environment.GetFolderPath(folder);
     options.UseSqlite($"Data Source={Path.Join(path,
@@ -281,7 +308,7 @@ public class CustomWebApplicationFactory<TProgram>
       var descriptor = services.Single(d => d.ServiceType
         == typeof(DbContextOptions<ShortUrlDbContext>));
       services.Remove(descriptor);
-      services.AddDbContext<ShortUrlDbContext>(options => 
+*      services.AddDbContext<ShortUrlDbContext>(options => 
         options.UseInMemoryDatabase("InMemoryForTesting"));
     });
   }
@@ -290,7 +317,9 @@ public class CustomWebApplicationFactory<TProgram>
 
 ???
 
-* 
+* For the test runs we create our own WebApplicationFactory where we can make changes to the DI container before the application is built and run for resting
+* Notice that we remove the DbContext that was set in Program.cs, and replace it with an in-memory database 
+* This is an example of how we can use DI to set up our application for testing
 
 ---
 
@@ -320,6 +349,18 @@ public class EndpointTests
 }
 ```
 
+???
+
+* So, to put it all together, we make our test class implement the IClassFixture interface
+* This means that the application instance will be shared between all the tests defined in this class
+* This would make our tests a bit quicker to execute
+
+---
+
+# Demo
+
+.center[![Let's go](images/demo-3.gif)]
+
 ---
 
 # Challenge: dependencies
@@ -332,18 +373,14 @@ public class EndpointTests
 * A list of dependencies such as this might be familiar to you
 * A list of dependencies such as this also becomes a challenge to testing
 * The particurlar challenge for testing in a situation like this, is how to handle the fact that the service reaches out to third party serviecs via libraries
+* How this is done, what the communication is like, is often opaque to the developer
 * With this challenge in mind, it is about time to introduce Dapr into the mix!
-* Biblioteker
-* API-er
-* Lære seg API-enes mekanismer
-* Holde avhengighetene oppdatert
-
 
 ---
 
 class: center
 
-# Dapr
+# Dapr.io
 
 .left-column[
 ### APIs for building portable and reliable microservices
@@ -363,7 +400,7 @@ class: center
 
 * One central concept in Dapr is the sidecar pattern
 * As you may or may not know, a sidecar is originally an extra passenger seat stitched on to a motorcycle
-* Quite rear and quaint these days, but depending on your age, you may or may not have seen one in real life. I am revealing my age here...
+* Quite rare and quaint these days, but depending on your age, you may or may not have seen one in real life. I am revealing my age here...
 
 ---
 
@@ -427,6 +464,12 @@ class: center
 
 ---
 
+# Demo
+
+.center[![Let's go](images/excited.gif)]
+
+---
+
 # Named HttpClient
 
 **Program.cs:**
@@ -437,12 +480,12 @@ var daprHttpPort = Environment
 
 builder.Services.AddHttpClient("state", client => {
     client.BaseAddress
-      = new Uri($"http://localhost:{daprHttpPort}/v1.0/state/");
+*      = new Uri($"http://localhost:{daprHttpPort}/v1.0/state/");
 });
 
 builder.Services.AddHttpClient("publish", client => {
     client.BaseAddress
-      = new Uri($"http://localhost:{daprHttpPort}/v1.0/publish/");
+*      = new Uri($"http://localhost:{daprHttpPort}/v1.0/publish/");
 });
 ```
 
@@ -463,12 +506,12 @@ const STORE_NAME = "shorturls";
 public async Task<ShortUrl> Get(string shortPath)
 {
   var client = _httpClientFactory.CreateClient("state");
-  var result = await client.GetAsync($"{STORE_NAME}/{shortPath}");
+*  var result = await client.GetAsync($"{STORE_NAME}/{shortPath}");
   if (result.StatusCode == HttpStatusCode.NoContent)
     return ShortUrl.Empty();
   if (result.IsSuccessStatusCode)
   {
-    return await result.Content.ReadFromJsonAsync<ShortUrl>()
+*    return await result.Content.ReadFromJsonAsync<ShortUrl>()
       ?? ShortUrl.Empty();
   }
   throw new Exception($"GET {result.RequestMessage?.RequestUri}"
@@ -554,7 +597,6 @@ public class EventNotificationController
   private const string PUBSUB_NAME = "urlshortener-pub-sub";
   private const string TOPIC_NAME = "requests";
 
-  [Topic(PUBSUB_NAME, TOPIC_NAME)]
   [HttpPost("request")]
   public async Task<IActionResult> ReceiveRequestEvent(
     [FromBody]DaprData<RequestEvent> message)
@@ -575,6 +617,14 @@ public class EventNotificationController
 * The integration here is a push to the application via a controller
 
 ---
+
+# Demo
+
+.center[![Let's go](images/excited.gif)]
+
+---
+
+class: center, middle
 
 # What does this mean
 ## ...for testing?
@@ -601,10 +651,9 @@ public class EventNotificationController
 * Ports provide a generic way to communicate with the business logic, separated into input and output ports
 * Adapters implement specific ways the environment communicates with the application core (via ports)
 * Separated into primary/driving adapters, and secondary/driven adapters
-
-https://alistair.cockburn.us/hexagonal-architecture/
-https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)
-https://medium.com/idealo-tech-blog/hexagonal-ports-adapters-architecture-e3617bcf00a0
+* https://alistair.cockburn.us/hexagonal-architecture/
+* https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)
+* https://medium.com/idealo-tech-blog/hexagonal-ports-adapters-architecture-e3617bcf00a0
 
 ---
 
@@ -632,7 +681,7 @@ https://medium.com/idealo-tech-blog/hexagonal-ports-adapters-architecture-e3617b
 
 * So, how does our use of Dapr impact our architecture?
 * Well, all the adapters essentially become HTTP-based
-* The primary adapters are controllers if you use the MVC patterns, or plan Kestrel middleware if not
+* The primary adapters are controllers if you use the MVC patterns, or plain Kestrel middleware if not
 * The secondary adapters can all be based on HttpClient
 
 ---
@@ -655,6 +704,24 @@ https://medium.com/idealo-tech-blog/hexagonal-ports-adapters-architecture-e3617b
 
 .center[.img-width-all[![🤷](images/demo-app.drawio.png)]]
 
+???
+
+* We need a silly demo-application
+* I need my own url shortener!
+* And it has functionality that I have spread across four microservices
+
+---
+
+# Demo
+
+.center[![Let's go](images/truffle.gif)]
+
+---
+
+# Redirection tests
+
+.center[.img-width-all[![🤷](images/demo-app-main-tests.drawio.png)]]
+
 ---
 
 # Redirection tests
@@ -674,12 +741,6 @@ public async Task ShouldRedirectIfFound(string path,
   VerifyDrivenAdapterExpectations();
 }
 ```
-
----
-
-# Redirection tests
-
-.center[.img-width-all[![🤷](images/demo-app-main-tests.drawio.png)]]
 
 ---
 
@@ -844,7 +905,15 @@ public async Task ShouldSendNotificationIfNoMatchEventReceived()
   bindingsHttpClient.VerifyNoOutstandingExpectation();
 }
 ```
+
 ---
+
+# Demo
+
+.center[![Let's go](images/truffle.gif)]
+
+---
+
 # Tips and tricks
 
 1. Build a catalog of request/response data
@@ -853,6 +922,9 @@ public async Task ShouldSendNotificationIfNoMatchEventReceived()
 1. Inspect Dapr API
    * Documentation at [dapr.io](https://dapr.io).
    * Use **REST Client** VS Code extension to poke at your sidecar
+1. Spin up a sidecar with your components
+   * `dapr run --app-id kongsli-urlshortener-main --components-path ../components --dapr-http-port 3601`
+
 
 ---
 
