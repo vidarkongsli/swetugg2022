@@ -226,17 +226,7 @@ class: center, middle
 
 ---
 
-# Demo
-
-.center[![Let's go](images/demo-3.gif)]
-
-???
-
-* 
-
----
-
-# Integration test with Asp.Net
+# Integration test in ASP.NET
 
 **EndpointTests.cs:**
 
@@ -461,12 +451,6 @@ class: center
 * A developer would program against the Dapr APIs
 * HttpClient is your friend
 * Let's see how this would look like in code
-
----
-
-# Demo
-
-.center[![Let's go](images/excited.gif)]
 
 ---
 
@@ -700,7 +684,7 @@ class: center, middle
 
 ---
 
-# A demo application
+# The silly demo app
 
 .center[.img-width-all[![🤷](images/demo-app.drawio.png)]]
 
@@ -709,12 +693,6 @@ class: center, middle
 * We need a silly demo-application
 * I need my own url shortener!
 * And it has functionality that I have spread across four microservices
-
----
-
-# Demo
-
-.center[![Let's go](images/truffle.gif)]
 
 ---
 
@@ -812,7 +790,7 @@ private void InitializeDrivenAdapters()
   
   stateHttpClient.Clear();
   
-  stateHttpClient.When(HttpMethod.Get,
+*  stateHttpClient.When(HttpMethod.Get,
     "http://localhost/shorturls/ex")
     .Respond("application/json",
       EmbeddedResource.ReadTestData<RedirectionTests>("State",
@@ -823,6 +801,8 @@ private void InitializeDrivenAdapters()
       + $"{request.Method} {request.RequestUri}"));
 }
 ```
+
+**Nuget package:** [RichardSzalay.MockHttp](https://github.com/richardszalay/mockhttp).
 
 ---
 
@@ -835,7 +815,7 @@ private void InitializeDrivenAdapters()
     .CreateHttpResponsesFor("publish");
   publishHttpClient.Clear();
   publishHttpClient
-   .Expect(HttpMethod.Post, "http://localhost/"
+*   .Expect(HttpMethod.Post, "http://localhost/"
      + RequestEventPublisher.PUBSUB_NAME + "/"
      + RequestEventPublisher.TOPIC_NAME;
    .Respond(HttpStatusCode.NoContent);
