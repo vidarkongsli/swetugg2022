@@ -711,10 +711,14 @@ class: center, middle
 public async Task ShouldRedirectIfFound(string path,
   HttpStatusCode expectedHttpStatusCode)
 {
+  // Arrange
   InitializeDrivenAdapters();
   var client = _factory.CreateClient();
+
+  // Act
   var result = await client.GetAsync(path);
 
+  // Assert
   Assert.Equal(expectedHttpStatusCode, result.StatusCode);
   VerifyDrivenAdapterExpectations();
 }
