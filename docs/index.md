@@ -522,7 +522,7 @@ const STORE_NAME = "shorturls";
 public async Task Save(params ShortUrl[] shortUrls)
 {
   var client = _httpClientFactory.CreateClient("state");
-  var result = await _client.PostAsJsonAsync(STORE_NAME,
+* var result = await _client.PostAsJsonAsync(STORE_NAME,
     shortUrls.Select(shortUrl
       => new SaveRequest<ShortUrl>(shortUrl.ShortPath, shortUrl)));
   if (!result.IsSuccessStatusCode)
@@ -558,7 +558,7 @@ var requestEvent = new RequestEvent(Guid.NewGuid().ToString(),
     .HttpContext.Connection.RemoteIpAddress?.ToString());
 
 var client = _httpClientFactory.CreateClient("publish");
-await client.PostAsJsonAsync($"{PUBSUB_NAME}/{TOPIC_NAME}",
+*await client.PostAsJsonAsync($"{PUBSUB_NAME}/{TOPIC_NAME}",
   requestEvent);
 ```
 
