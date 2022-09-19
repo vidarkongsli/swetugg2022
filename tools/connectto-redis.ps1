@@ -1,0 +1,1 @@
+docker run --rm -it --link dapr_redis redis redis-cli -h dapr_redis

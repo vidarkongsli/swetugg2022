@@ -1,0 +1,13 @@
+
+@daprHttpPort=3603
+@bindingName=email
+POST http://localhost:{{daprHttpPort}}/v1.0/bindings/email
+Content-Type: application/json
+
+{
+  "operation": "create",
+  "metadata": {
+    "subject": "An email from Dapr SendGrid binding"
+  },
+  "data": "<h1>Testing Dapr Bindings</h1>This is a test.<br>Bye!"
+}

@@ -1,0 +1,82 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Models", "Kongsli.UrlShortener.Models\Kongsli.UrlShortener.Models.csproj", "{5B387631-1F08-4DB1-96A7-DCFD867C9A4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Main", "Kongsli.UrlShortener.Main\Kongsli.UrlShortener.Main.csproj", "{15AF1F20-6958-461E-9210-37163B038F6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Main.Tests", "Kongsli.UrlShortener.Main.Tests\Kongsli.UrlShortener.Main.Tests.csproj", "{B5CC6757-2E8D-42DB-AC76-4641A4F404B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Admin", "Kongsli.UrlShortener.Admin\Kongsli.UrlShortener.Admin.csproj", "{DB3CA81F-A423-4B21-874C-3FD504197637}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Admin.Tests", "Kongsli.UrlShortener.Admin.Tests\Kongsli.UrlShortener.Admin.Tests.csproj", "{5D416C3D-F69B-4183-86BF-492DEF5E7D3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Notifications", "Kongsli.UrlShortener.Notifications\Kongsli.UrlShortener.Notifications.csproj", "{9F69CF7C-4002-4DCC-8CCE-CB2561B1A16C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Notifications.Tests", "Kongsli.UrlShortener.Notifications.Tests\Kongsli.UrlShortener.Notifications.Tests.csproj", "{1506D545-8DC0-4C8D-9108-6A5336A0FD5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Test.Helpers", "Kongsli.UrlShortener.Test.Helpers\Kongsli.UrlShortener.Test.Helpers.csproj", "{24EC3948-3A0F-4937-9F29-8064DC9B645A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Stats", "Kongsli.UrlShortener.Stats\Kongsli.UrlShortener.Stats.csproj", "{6C826DD8-B433-4CD8-B0DF-A4E8AB02E4AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Original", "Kongsli.UrlShortener.Original\Kongsli.UrlShortener.Original.csproj", "{8ED8F991-2FB1-44CF-A6AE-4A68137AE06F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kongsli.UrlShortener.Original.Tests", "Kongsli.UrlShortener.Original.Tests\Kongsli.UrlShortener.Original.Tests.csproj", "{D8EACCFF-376B-4371-A64D-4729F8C1501D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B387631-1F08-4DB1-96A7-DCFD867C9A4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B387631-1F08-4DB1-96A7-DCFD867C9A4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B387631-1F08-4DB1-96A7-DCFD867C9A4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B387631-1F08-4DB1-96A7-DCFD867C9A4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15AF1F20-6958-461E-9210-37163B038F6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15AF1F20-6958-461E-9210-37163B038F6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15AF1F20-6958-461E-9210-37163B038F6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15AF1F20-6958-461E-9210-37163B038F6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5CC6757-2E8D-42DB-AC76-4641A4F404B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5CC6757-2E8D-42DB-AC76-4641A4F404B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5CC6757-2E8D-42DB-AC76-4641A4F404B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5CC6757-2E8D-42DB-AC76-4641A4F404B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB3CA81F-A423-4B21-874C-3FD504197637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB3CA81F-A423-4B21-874C-3FD504197637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB3CA81F-A423-4B21-874C-3FD504197637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB3CA81F-A423-4B21-874C-3FD504197637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D416C3D-F69B-4183-86BF-492DEF5E7D3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D416C3D-F69B-4183-86BF-492DEF5E7D3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D416C3D-F69B-4183-86BF-492DEF5E7D3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D416C3D-F69B-4183-86BF-492DEF5E7D3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F69CF7C-4002-4DCC-8CCE-CB2561B1A16C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F69CF7C-4002-4DCC-8CCE-CB2561B1A16C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F69CF7C-4002-4DCC-8CCE-CB2561B1A16C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F69CF7C-4002-4DCC-8CCE-CB2561B1A16C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1506D545-8DC0-4C8D-9108-6A5336A0FD5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1506D545-8DC0-4C8D-9108-6A5336A0FD5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1506D545-8DC0-4C8D-9108-6A5336A0FD5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1506D545-8DC0-4C8D-9108-6A5336A0FD5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24EC3948-3A0F-4937-9F29-8064DC9B645A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24EC3948-3A0F-4937-9F29-8064DC9B645A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24EC3948-3A0F-4937-9F29-8064DC9B645A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24EC3948-3A0F-4937-9F29-8064DC9B645A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C826DD8-B433-4CD8-B0DF-A4E8AB02E4AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C826DD8-B433-4CD8-B0DF-A4E8AB02E4AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C826DD8-B433-4CD8-B0DF-A4E8AB02E4AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C826DD8-B433-4CD8-B0DF-A4E8AB02E4AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ED8F991-2FB1-44CF-A6AE-4A68137AE06F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ED8F991-2FB1-44CF-A6AE-4A68137AE06F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ED8F991-2FB1-44CF-A6AE-4A68137AE06F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ED8F991-2FB1-44CF-A6AE-4A68137AE06F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8EACCFF-376B-4371-A64D-4729F8C1501D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8EACCFF-376B-4371-A64D-4729F8C1501D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8EACCFF-376B-4371-A64D-4729F8C1501D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8EACCFF-376B-4371-A64D-4729F8C1501D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

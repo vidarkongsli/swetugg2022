@@ -1,0 +1,32 @@
+GET http://localhost:3601/v1.0/state/shorturls/urls-inventory
+
+###
+GET http://localhost:3601/v1.0/state/shorturls/db
+
+
+###
+
+POST http://localhost:3601/v1.0/state/shorturls
+Content-Type: application/json
+
+[
+    {
+        "key": "db",
+        "value": {
+            "location": "https://Www.dagbladet.no",
+            "shortPath": "db",
+            "isEmpty": false
+        }
+    }
+]
+
+###
+POST http://localhost:3601/v1.0/state/shorturls
+Content-Type: application/json
+
+[
+{
+        "key": "urls-inventory",
+        "value": ["vg","db"]
+}
+]

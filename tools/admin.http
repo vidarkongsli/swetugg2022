@@ -1,0 +1,30 @@
+@hostAndScheme=https://localhost:7275
+
+GET {{hostAndScheme}}/api/shorturls
+
+###
+GET {{hostAndScheme}}/api/shorturls/af
+
+###
+
+POST {{hostAndScheme}}/api/shorturls
+Content-Type: application/json
+
+{
+  "location": "https://www.aftonbladet.se",
+  "shortPath": "af",
+  "isEmpty": false
+}
+
+###
+PUT {{hostAndScheme}}/api/shorturls
+Content-Type: application/json
+
+{
+  "location": "https://www.expressen.se/",
+  "shortPath": "ex",
+  "isEmpty": false
+}
+
+###
+DELETE {{hostAndScheme}}/api/shorturls/af

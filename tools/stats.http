@@ -1,0 +1,9 @@
+POST http://localhost:5031/request
+Content-Type: application/json
+
+{
+    "id": "d5b9d975-c578-4e00-9a2d-b66c047de8b7",
+    "isMatch":true,
+    "shortPath":"/vg",
+    "timeStamp":"2022-06-21T07:17:17.8484112+02:00"
+}

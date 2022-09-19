@@ -1,0 +1,15 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: email
+  namespace: default
+spec:
+  type: bindings.twilio.sendgrid
+  version: v1
+  metadata:
+  - name: apiKey
+    value: "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" # required, this is your SendGrid key
+  - name: emailTo
+    value: 'vidar@kongs.li'
+  - name: emailFrom
+    value: 'vidar.kongsli@outlook.com'

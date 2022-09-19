@@ -1,0 +1,5 @@
+GET http://localhost:5032/af
+
+###
+
+GET http://localhost:5032/health
