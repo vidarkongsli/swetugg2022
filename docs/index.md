@@ -191,7 +191,7 @@ class: center, middle
 * A class of tests could be left to the compiler
   * Static types
   * Null checks
-  * Input validation
+  * Parameter validation
 * Tests do not really have to be super quick
 
 ???
